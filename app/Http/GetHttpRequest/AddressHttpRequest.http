@@ -1,0 +1,34 @@
+### Get Province
+GET {{base_url}}/provinces
+Content-Type: application/json
+
+{
+    "q" : ""
+}
+
+### Get City
+GET {{base_url}}/cities
+Content-Type: application/json
+
+{
+    "q" : "",
+    "province_code" : "17"
+}
+
+### Get District
+GET {{base_url}}/districts
+Content-Type: application/json
+
+{
+    "q" : "",
+    "city_code" : "1701"
+}
+
+### Get Village
+GET {{base_url}}/villages
+Content-Type: application/json
+
+{
+    "q" : "",
+    "district_code" : "170110"
+}
