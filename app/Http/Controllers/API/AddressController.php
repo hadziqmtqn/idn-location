@@ -24,7 +24,6 @@ class AddressController extends Controller
                 'code',
                 'name'
             ])
-            ->limit(10)
             ->get();
 
         return response()->json($provinces);
@@ -47,7 +46,6 @@ class AddressController extends Controller
                 'indonesia_cities.name',
                 'indonesia_provinces.name as province_name'
             ])
-            ->limit(10)
             ->get();
 
         return response()->json($cities);
@@ -70,7 +68,6 @@ class AddressController extends Controller
                 'indonesia_districts.name',
                 'indonesia_cities.name as city_name'
             ])
-            ->limit(10)
             ->get();
 
         return response()->json($districts);
@@ -93,7 +90,6 @@ class AddressController extends Controller
                 'indonesia_villages.name',
                 'indonesia_districts.name as district_name'
             ])
-            ->limit(10)
             ->get();
 
         return response()->json($villages);
