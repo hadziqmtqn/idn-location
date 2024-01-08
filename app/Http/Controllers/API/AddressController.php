@@ -32,7 +32,7 @@ class AddressController extends Controller
     public function selectCity(Request $request)
     {
         $search = $request->input('q');
-        $province_code = $request->input('province_code');
+        $province = $request->input('province');
 
         $cities = array();
         $cities = IndonesiaCity::query()
@@ -40,7 +40,7 @@ class AddressController extends Controller
             ->when($search, function($query) use($search){
                 $query->where('indonesia_cities.name', 'LIKE', '%'.$search.'%');
             })
-            ->where('indonesia_cities.province_code', $province_code)
+            ->where('indonesia_provinces.name', $province)
             ->select([
                 'indonesia_cities.code',
                 'indonesia_cities.name',
@@ -54,7 +54,7 @@ class AddressController extends Controller
     public function selectDistrict(Request $request)
     {
         $search = $request->input('q');
-        $city_code = $request->input('city_code');
+        $city = $request->input('city');
 
         $districts = array();
         $districts = IndonesiaDistrict::query()
@@ -62,7 +62,7 @@ class AddressController extends Controller
             ->when($search, function($query) use($search){
                 $query->where('indonesia_districts.name', 'LIKE', '%'.$search.'%');
             })
-            ->where('indonesia_districts.city_code', $city_code)
+            ->where('indonesia_cities.name', $city)
             ->select([
                 'indonesia_districts.code',
                 'indonesia_districts.name',
@@ -76,7 +76,7 @@ class AddressController extends Controller
     public function selectVillage(Request $request)
     {
         $search = $request->input('q');
-        $district_code = $request->input('district_code');
+        $district = $request->input('district');
 
         $villages = array();
         $villages = IndonesiaVillage::query()
@@ -84,7 +84,7 @@ class AddressController extends Controller
             ->when($search, function($query) use($search){
                 $query->where('indonesia_villages.name', 'LIKE', '%'.$search.'%');
             })
-            ->where('indonesia_villages.district_code', $district_code)
+            ->where('indonesia_districts.name', $district)
             ->select([
                 'indonesia_villages.code',
                 'indonesia_villages.name',
