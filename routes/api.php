@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\AddressController;
+use App\Http\Controllers\API\V2\CityV2Controller;
+use App\Http\Controllers\API\V2\ProvinceV2Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +21,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(function (){
+Route::group(['prefix' => 'v1'], function (){
     Route::get('/provinces', [AddressController::class, 'selectProvince'])->name('address.province-select');
     Route::get('/cities', [AddressController::class, 'selectCity'])->name('address.city-select');
     Route::get('/districts', [AddressController::class, 'selectDistrict'])->name('address.district-select');
     Route::get('/villages', [AddressController::class, 'selectVillage'])->name('address.village-select');
+});
+
+Route::group(['prefix' => 'v2'], function () {
+    Route::get('/provinces', [ProvinceV2Controller::class, 'index']);
+    Route::get('/cities', [CityV2Controller::class, 'index']);
 });

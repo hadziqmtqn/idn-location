@@ -15,7 +15,6 @@ class AddressController extends Controller
     {
         $search = $request->input('q');
 
-        $provinces = array();
         $provinces = IndonesiaProvince::query()
             ->when($search, function($query) use($search){
                 $query->where('name', 'LIKE', '%'.$search.'%');
@@ -34,7 +33,6 @@ class AddressController extends Controller
         $search = $request->input('q');
         $province = $request->input('province');
 
-        $cities = array();
         $cities = IndonesiaCity::query()
             ->join('indonesia_provinces', 'indonesia_cities.province_code', '=', 'indonesia_provinces.code')
             ->when($search, function($query) use($search){
@@ -56,7 +54,6 @@ class AddressController extends Controller
         $search = $request->input('q');
         $city = $request->input('city');
 
-        $districts = array();
         $districts = IndonesiaDistrict::query()
             ->join('indonesia_cities', 'indonesia_districts.city_code', '=', 'indonesia_cities.code')
             ->when($search, function($query) use($search){
@@ -78,7 +75,6 @@ class AddressController extends Controller
         $search = $request->input('q');
         $district = $request->input('district');
 
-        $villages = array();
         $villages = IndonesiaVillage::query()
             ->join('indonesia_districts', 'indonesia_villages.district_code', '=', 'indonesia_districts.code')
             ->when($search, function($query) use($search){
