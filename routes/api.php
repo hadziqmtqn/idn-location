@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\V2\CityV2Controller;
+use App\Http\Controllers\API\V2\DistrictV2Controller;
 use App\Http\Controllers\API\V2\ProvinceV2Controller;
+use App\Http\Controllers\API\V2\VillageV2Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +33,6 @@ Route::group(['prefix' => 'v1'], function (){
 Route::group(['prefix' => 'v2'], function () {
     Route::get('/provinces', [ProvinceV2Controller::class, 'index']);
     Route::get('/cities', [CityV2Controller::class, 'index']);
+    Route::get('/districts', [DistrictV2Controller::class, 'index']);
+    Route::get('/villages', [VillageV2Controller::class, 'index']);
 });

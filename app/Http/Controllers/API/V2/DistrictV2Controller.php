@@ -3,28 +3,31 @@
 namespace App\Http\Controllers\API\V2;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CityRequest;
+use App\Http\Requests\DistrictRequest;
 use App\Services\IdnLocationService;
 use App\Traits\ApiResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CityV2Controller extends Controller
+class DistrictV2Controller extends Controller
 {
     use ApiResponse;
 
     protected IdnLocationService $idnLocationService;
 
+    /**
+     * @param IdnLocationService $idnLocationService
+     */
     public function __construct(IdnLocationService $idnLocationService)
     {
         $this->idnLocationService = $idnLocationService;
     }
 
-    public function index(CityRequest $request): JsonResponse
+    public function index(DistrictRequest $request): JsonResponse
     {
-        $provinceCode = $request->input('province_code');
+        $cityCode = $request->input('city_code');
         $search = $request->query('search');
-        $data = $this->idnLocationService->fetchAndFilterData('kabupaten', $provinceCode, $search);
+        $data = $this->idnLocationService->fetchAndFilterData('kecamatan', $cityCode, $search);
 
         return $this->apiResponse('Get data success', $data, Response::HTTP_OK);
     }
