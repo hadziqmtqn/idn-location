@@ -15,6 +15,11 @@ class IndonesiaCity extends Model
         'meta',
     ];
 
+    public function indonesiaDistricts(): HasMany
+    {
+        return $this->hasMany(IndonesiaDistrict::class, 'city_code', 'code');
+    }
+
     public function scopeFilterByCode(Builder $query, $code): Builder
     {
         return $query->where('code', $code);

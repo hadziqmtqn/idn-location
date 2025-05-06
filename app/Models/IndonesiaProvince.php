@@ -18,4 +18,9 @@ class IndonesiaProvince extends Model
     {
         return $query->where('code', $code);
     }
+
+    public function indonesiaCities(): HasMany
+    {
+        return $this->hasMany(IndonesiaCity::class, 'province_code', 'code');
+    }
 }

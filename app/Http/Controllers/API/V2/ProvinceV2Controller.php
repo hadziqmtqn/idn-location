@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API\V2;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProvinceRequest;
+use App\Models\IndonesiaProvince;
 use App\Services\GenerateData\GenerateProvinceService;
 use App\Services\IdnLocationService;
 use App\Traits\ApiResponse;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,6 +31,15 @@ class ProvinceV2Controller extends Controller
         $this->generateProvinceService = $generateProvinceService;
     }
 
+    public function show(IndonesiaProvince $indonesiaProvince): View
+    {
+        $indonesiaProvince->load([
+            'indonesiaCities' => fn($query) => $query->withCount('indonesiaDistricts')
+        ]);
+
+        return \view('idn-location.province', compact('indonesiaProvince'));
+    }
+
     public function index(ProvinceRequest $request): JsonResponse
     {
         $search = $request->query('search');
@@ -37,15 +48,15 @@ class ProvinceV2Controller extends Controller
         return $this->apiResponse('Get data success', $data, Response::HTTP_OK);
     }
 
-    public function store(): JsonResponse
+    public function store()
     {
         try {
             $this->generateProvinceService->saveData($this->idnLocationService->fetchAndFilterData('provinsi'));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
-            return $this->apiResponse('Internal server error', null, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return redirect()->back()->with('error', 'Internal server error');
         }
 
-        return $this->apiResponse('Data has ben saved', null, Response::HTTP_OK);
+        return redirect()->back()->with('success', 'Data has ben saved');
     }
 }
