@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CityRequest;
 use App\Jobs\GenerateCityJob;
 use App\Models\IndonesiaCity;
-use App\Models\IndonesiaProvince;
 use App\Services\IdnLocationService;
 use App\Traits\ApiResponse;
 use Exception;
@@ -47,13 +46,7 @@ class CityV2Controller extends Controller
     public function store()
     {
         try {
-            $provinces = IndonesiaProvince::get();
-            foreach ($provinces as $province) {
-                $cities = $this->idnLocationService->fetchAndFilterData('kabupaten', $province->code);
-                foreach ($cities as $city) {
-                    GenerateCityJob::dispatch($province, $city['kode'], $city['nama']);
-                }
-            }
+            GenerateCityJob::dispatch();
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
             return redirect()->back()->with('error', 'Internal server error');

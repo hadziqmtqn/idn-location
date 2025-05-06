@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\IndonesiaCity;
 use App\Models\IndonesiaProvince;
+use App\Services\IdnLocationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,24 +15,22 @@ class GenerateCityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected IndonesiaProvince $indonesiaProvince;
-    protected mixed $code;
-    protected mixed $name;
-
-    public function __construct(IndonesiaProvince $indonesiaProvince, mixed $code, mixed $name)
-    {
-        $this->indonesiaProvince = $indonesiaProvince;
-        $this->code = $code;
-        $this->name = $name;
-    }
-
     public function handle(): void
     {
-        $indonesiaCity = IndonesiaCity::filterByCode($this->code)
-            ->firstOrNew();
-        $indonesiaCity->code = $this->code;
-        $indonesiaCity->name = str_replace('KAB.', 'KABUPATEN', $this->name);
-        $indonesiaCity->province_code = $this->indonesiaProvince->code;
-        $indonesiaCity->save();
+        $idnLocationService = app(IdnLocationService::class);
+        $provinces = IndonesiaProvince::get();
+
+        foreach ($provinces as $province) {
+            $cities = $idnLocationService->fetchAndFilterData('kabupaten', $province->code);
+
+            foreach ($cities as $city) {
+                $indonesiaCity = IndonesiaCity::filterByCode($city['kode'])
+                    ->firstOrNew();
+                $indonesiaCity->code = $city['kode'];
+                $indonesiaCity->name = str_replace('KAB.', 'KABUPATEN', $city['nama']);
+                $indonesiaCity->province_code = $province->code;
+                $indonesiaCity->save();
+            }
+        }
     }
 }

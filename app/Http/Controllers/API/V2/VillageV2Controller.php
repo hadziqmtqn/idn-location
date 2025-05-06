@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\V2;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VillageRequest;
 use App\Jobs\GenerateVillageJob;
-use App\Models\IndonesiaDistrict;
 use App\Services\IdnLocationService;
 use App\Traits\ApiResponse;
 use Exception;
@@ -39,13 +38,7 @@ class VillageV2Controller extends Controller
     public function store()
     {
         try {
-            $districts = IndonesiaDistrict::get();
-            foreach ($districts as $district) {
-                $villages = $this->idnLocationService->fetchAndFilterData('desa', $district->code);
-                foreach ($villages as $village) {
-                    GenerateVillageJob::dispatch($district->code, $village['kode'], $village['nama']);
-                }
-            }
+            GenerateVillageJob::dispatch();
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
             return redirect()->back()->with('error', 'Internal server error');
