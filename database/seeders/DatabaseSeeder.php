@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ProvincesSeeder::class,
+            /*ProvincesSeeder::class,
             CitiesSeeder::class,
             DistrictsSeeder::class,
-            VillagesSeeder::class
+            VillagesSeeder::class*/
         ]);
     }
 }

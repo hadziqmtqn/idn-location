@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class IndonesiaCity extends Model
@@ -12,4 +13,9 @@ class IndonesiaCity extends Model
         'name',
         'meta',
     ];
+
+    public function scopeFilterByCode(Builder $query, $code): Builder
+    {
+        return $query->where('code', $code);
+    }
 }

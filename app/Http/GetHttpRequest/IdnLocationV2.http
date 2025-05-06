@@ -1,0 +1,11 @@
+### GET provinces
+GET {{url_external}}?level=provinsi&parent=2024_12.2022&periode_merge=2024_1.2022
+
+### GET Cities
+GET {{url_external}}?level=kabupaten&parent=11&periode_merge=2024_1.2022
+
+### GET Districts
+GET {{url_external}}?level=kecamatan&parent=1101&periode_merge=2024_1.2022
+
+### GET Villages
+GET {{url_external}}?level=desa&parent=1101020&periode_merge=2024_1.2022

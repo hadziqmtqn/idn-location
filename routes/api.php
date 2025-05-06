@@ -32,7 +32,11 @@ Route::group(['prefix' => 'v1'], function (){
 
 Route::group(['prefix' => 'v2'], function () {
     Route::get('/provinces', [ProvinceV2Controller::class, 'index']);
+    Route::post('/generate/provinces', [ProvinceV2Controller::class, 'store']);
+
     Route::get('/cities', [CityV2Controller::class, 'index']);
+    Route::post('/generate/cities', [CityV2Controller::class, 'store']);
+
     Route::get('/districts', [DistrictV2Controller::class, 'index']);
     Route::get('/villages', [VillageV2Controller::class, 'index']);
 });
