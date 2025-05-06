@@ -36,14 +36,6 @@
                     </tbody>
                 </table>
             </div>
-
-            @if($provinces->count() > 0)
-                <hr>
-                <form action="#" method="post">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Generate All Cities</button>
-                </form>
-            @endif
         </div>
     </div>
 @endsection

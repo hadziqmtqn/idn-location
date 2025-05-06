@@ -33,6 +33,11 @@
                     </tbody>
                 </table>
             </div>
+            <hr>
+            <form action="{{ route('district-v2.store') }}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-primary">Generate All Districts</button>
+            </form>
         </div>
     </div>
 @endsection

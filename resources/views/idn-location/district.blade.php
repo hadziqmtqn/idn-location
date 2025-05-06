@@ -2,8 +2,8 @@
 @section('contents')
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h5>{{ $indonesiaProvince->name }}</h5>
-            <a href="{{ route('home.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
+            <h5>{{ $indonesiaDistrict->name }}</h5>
+            <a href="{{ route('city-v2.show', $indonesiaDistrict->city_code) }}" class="btn btn-secondary btn-sm">Kembali</a>
         </div>
         <div class="card-body">
             @include('session')
@@ -14,29 +14,23 @@
                         <th>#</th>
                         <th>Name</th>
                         <th>Code</th>
-                        <th>Number Of District</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($indonesiaProvince->indonesiaCities as $city)
+                    @foreach($indonesiaDistrict->indonesiaVillages as $village)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $city->name }}</td>
-                            <td>{{ $city->code }}</td>
-                            <td>{{ $city->indonesia_districts_count }}</td>
-                            <td>
-                                <a href="{{ route('city-v2.show', $city->code) }}" class="btn btn-sm btn-secondary">Show</a>
-                            </td>
+                            <td>{{ $village->name }}</td>
+                            <td>{{ $village->code }}</td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
             <hr>
-            <form action="{{ route('city-v2.store') }}" method="post">
+            <form action="{{ route('village-v2.store') }}" method="post">
                 @csrf
-                <button type="submit" class="btn btn-primary">Generate All Cities</button>
+                <button type="submit" class="btn btn-primary">Generate All Villages</button>
             </form>
         </div>
     </div>

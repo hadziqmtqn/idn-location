@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DistrictRequest;
 use App\Jobs\GenerateDistrictJob;
 use App\Models\IndonesiaCity;
+use App\Models\IndonesiaDistrict;
 use App\Services\IdnLocationService;
 use App\Traits\ApiResponse;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +38,14 @@ class DistrictV2Controller extends Controller
         return $this->apiResponse('Get data success', $data, Response::HTTP_OK);
     }
 
-    public function store(): JsonResponse
+    public function show(IndonesiaDistrict $indonesiaDistrict): View
+    {
+        $indonesiaDistrict->load('indonesiaVillages');
+
+        return \view('idn-location.district', compact('indonesiaDistrict'));
+    }
+
+    public function store()
     {
         try {
             $cities = IndonesiaCity::get();
@@ -48,9 +57,9 @@ class DistrictV2Controller extends Controller
             }
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
-            return $this->apiResponse('Internal server error', null, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return redirect()->back()->with('error', 'Internal server error');
         }
 
-        return $this->apiResponse('Data has ben saved', null, Response::HTTP_OK);
+        return redirect()->back()->with('success', 'Data has ben saved');
     }
 }
