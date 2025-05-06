@@ -26,7 +26,7 @@
                             <td>{{ $district->code }}</td>
                             <td>{{ $district->indonesia_villages_count }}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-secondary">Show</a>
+                                <a href="{{ route('district-v2.show', $district->code) }}" class="btn btn-sm btn-secondary">Show</a>
                             </td>
                         </tr>
                     @endforeach
