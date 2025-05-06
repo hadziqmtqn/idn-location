@@ -38,5 +38,8 @@ Route::group(['prefix' => 'v2'], function () {
     Route::post('/generate/cities', [CityV2Controller::class, 'store']);
 
     Route::get('/districts', [DistrictV2Controller::class, 'index']);
+    Route::post('/generate/districts', [DistrictV2Controller::class, 'store']);
+
     Route::get('/villages', [VillageV2Controller::class, 'index']);
+    Route::post('/generate/villages', [VillageV2Controller::class, 'store']);
 });

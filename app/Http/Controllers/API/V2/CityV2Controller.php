@@ -43,7 +43,6 @@ class CityV2Controller extends Controller
                     GenerateCityJob::dispatch($province, $city['kode'], $city['nama']);
                 }
             }
-            //$this->generateProvinceService->saveData($this->idnLocationService->fetchAndFilterData('provinsi'));
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
             return $this->apiResponse('Internal server error', null, Response::HTTP_INTERNAL_SERVER_ERROR);
