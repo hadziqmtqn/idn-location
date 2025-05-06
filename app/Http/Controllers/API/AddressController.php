@@ -31,7 +31,7 @@ class AddressController extends Controller
 
     public function selectCity(CityRequest $request): JsonResponse
     {
-        $cities = IndonesiaCity::with('provinceCode:id,name')
+        $cities = IndonesiaCity::with('provinceCode:code,name')
             ->search($request)
             ->get();
 
@@ -46,7 +46,7 @@ class AddressController extends Controller
 
     public function selectDistrict(DistrictRequest $request): JsonResponse
     {
-        $districts = IndonesiaDistrict::with('cityCode:id,name')
+        $districts = IndonesiaDistrict::with('cityCode:code,name')
             ->search($request)
             ->get();
 
@@ -61,7 +61,7 @@ class AddressController extends Controller
 
     public function selectVillage(VillageRequest $request): JsonResponse
     {
-        $villages = IndonesiaVillage::with('districtCode:id,name')
+        $villages = IndonesiaVillage::with('districtCode:code,name')
             ->search($request)
             ->get();
 
