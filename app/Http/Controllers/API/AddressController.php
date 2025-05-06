@@ -3,91 +3,74 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CityRequest;
+use App\Http\Requests\V1\DistrictRequest;
+use App\Http\Requests\V1\ProvinceRequest;
+use App\Http\Requests\V1\VillageRequest;
 use App\Models\IndonesiaCity;
 use App\Models\IndonesiaDistrict;
 use App\Models\IndonesiaProvince;
 use App\Models\IndonesiaVillage;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class AddressController extends Controller
 {
-    public function selectProvince(Request $request)
+    public function selectProvince(ProvinceRequest $request): JsonResponse
     {
-        $search = $request->input('q');
-
         $provinces = IndonesiaProvince::query()
-            ->when($search, function($query) use($search){
-                $query->where('name', 'LIKE', '%'.$search.'%');
-            })
-            ->select([
-                'code',
-                'name'
-            ])
+            ->search($request)
             ->get();
 
-        return response()->json($provinces);
+        return response()->json($provinces->map(function (IndonesiaProvince $indonesiaProvince) {
+            return collect([
+                'code' => $indonesiaProvince->code,
+                'name' => $indonesiaProvince->name
+            ]);
+        }));
     }
 
-    public function selectCity(Request $request)
+    public function selectCity(CityRequest $request): JsonResponse
     {
-        $search = $request->input('q');
-        $province = $request->input('province');
-
-        $cities = IndonesiaCity::query()
-            ->join('indonesia_provinces', 'indonesia_cities.province_code', '=', 'indonesia_provinces.code')
-            ->when($search, function($query) use($search){
-                $query->where('indonesia_cities.name', 'LIKE', '%'.$search.'%');
-            })
-            ->where('indonesia_provinces.name', $province)
-            ->select([
-                'indonesia_cities.code',
-                'indonesia_cities.name',
-                'indonesia_provinces.name as province_name'
-            ])
+        $cities = IndonesiaCity::with('provinceCode:id,name')
+            ->search($request)
             ->get();
 
-        return response()->json($cities);
+        return response()->json($cities->map(function (IndonesiaCity $indonesiaCity) {
+            return collect([
+                'code' => $indonesiaCity->code,
+                'name' => $indonesiaCity->name,
+                'province_name' => $indonesiaCity->provinceCode?->name
+            ]);
+        }));
     }
 
-    public function selectDistrict(Request $request)
+    public function selectDistrict(DistrictRequest $request): JsonResponse
     {
-        $search = $request->input('q');
-        $city = $request->input('city');
-
-        $districts = IndonesiaDistrict::query()
-            ->join('indonesia_cities', 'indonesia_districts.city_code', '=', 'indonesia_cities.code')
-            ->when($search, function($query) use($search){
-                $query->where('indonesia_districts.name', 'LIKE', '%'.$search.'%');
-            })
-            ->where('indonesia_cities.name', $city)
-            ->select([
-                'indonesia_districts.code',
-                'indonesia_districts.name',
-                'indonesia_cities.name as city_name'
-            ])
+        $districts = IndonesiaDistrict::with('cityCode:id,name')
+            ->search($request)
             ->get();
 
-        return response()->json($districts);
+        return response()->json($districts->map(function (IndonesiaDistrict $indonesiaDistrict) {
+            return collect([
+                'code' => $indonesiaDistrict->code,
+                'name' => $indonesiaDistrict->name,
+                'city_name' => $indonesiaDistrict->cityCode?->name
+            ]);
+        }));
     }
 
-    public function selectVillage(Request $request)
+    public function selectVillage(VillageRequest $request): JsonResponse
     {
-        $search = $request->input('q');
-        $district = $request->input('district');
-
-        $villages = IndonesiaVillage::query()
-            ->join('indonesia_districts', 'indonesia_villages.district_code', '=', 'indonesia_districts.code')
-            ->when($search, function($query) use($search){
-                $query->where('indonesia_villages.name', 'LIKE', '%'.$search.'%');
-            })
-            ->where('indonesia_districts.name', $district)
-            ->select([
-                'indonesia_villages.code',
-                'indonesia_villages.name',
-                'indonesia_districts.name as district_name'
-            ])
+        $villages = IndonesiaVillage::with('districtCode:id,name')
+            ->search($request)
             ->get();
 
-        return response()->json($villages);
+        return response()->json($villages->map(function (IndonesiaVillage $indonesiaVillage) {
+            return collect([
+                'code' => $indonesiaVillage->code,
+                'name' => $indonesiaVillage->name,
+                'district_name' => $indonesiaVillage->districtCode?->name
+            ]);
+        }));
     }
 }
